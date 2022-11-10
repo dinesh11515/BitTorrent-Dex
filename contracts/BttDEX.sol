@@ -27,7 +27,7 @@ contract  BttDEX {
         bool fulfilled;
         bool paid;
         bool cancelled;
-        bool rep;
+        bool report;
         uint256 amount;
         uint256 price;
         uint256 orderId;
@@ -59,17 +59,18 @@ contract  BttDEX {
     function register(string memory _name, string memory _email,payment[] memory _payments) public {
         require (sellers[msg.sender].seller == address(0), "You are already registered");
         sellers[msg.sender] = Seller(payable(msg.sender),_name,_email);
-        for(uint256 i = 0; i < _payments.length; i++){
+        console.log(_payments[0].userName);
+        for(uint8 i = 0; i < _payments.length; i++){
             paymentsOfSeller[msg.sender].push(_payments[i]);
         }
     }
 
-    function sellNative(uint256 amount,uint256 price) public payable {
+    function sellBtt(uint256 amount,uint256 price) public payable {
         require(msg.value == amount, "You must send the exact amount");
         if(sellerList[msg.sender].seller != msg.sender){
-            listId++;
             sellerList[msg.sender] = SellerList(payable(msg.sender), address(0),"MATIC",true,listId, amount,0, price, block.timestamp);
             listings.push(sellerList[msg.sender]);
+            listId++;
         }
         else{
             sellerList[msg.sender].amount += amount;
@@ -83,9 +84,9 @@ contract  BttDEX {
         IBRC20 token = IBRC20(tokenAddress);
         require(token.transferFrom(msg.sender, address(this), amount), "Token transfer failed");
         if(tokenSellerList[msg.sender][tokenAddress].seller != msg.sender){
-            listId++;
             tokenSellerList[msg.sender][tokenAddress] = SellerList(payable(msg.sender), tokenAddress,tokenName,false,listId, amount,0, price, block.timestamp);
             listings.push(tokenSellerList[msg.sender][tokenAddress]);
+            listId++;
         }
         else{
             tokenSellerList[msg.sender][tokenAddress].amount += amount;
@@ -95,47 +96,50 @@ contract  BttDEX {
         }
     }
 
-    function buyMaticRequest(uint256 id,uint256 amount) public payable {
-        require(listings[id].amount > amount, "Not enough tokens");
-        SellerList memory listing = sellerList[listings[id].seller];
-        require(listing.seller != address(0), "Seller not found");
-        orderId++;
-        buyRequests[listings[id].seller].push(buyRequest(payable(msg.sender),listings[id].seller,address(0),true,false,true,false,false,amount,listing.price,orderId));
-        orders[orderId] = buyRequests[listing.seller][buyRequests[listing.seller].length - 1];
-        userRequests[msg.sender].push(buyRequests[listing.seller][buyRequests[listing.seller].length - 1]);
+    function buyBttRequest(uint256 id,uint256 amount) public payable {
+        require(listings[id].amount >= amount, "Not enough tokens");
+        address payable seller = listings[id].seller;
+        require(seller != address(0), "Seller not found");
+        buyRequests[seller].push(buyRequest(payable(msg.sender),seller,address(0),true,false,true,false,false,amount,listings[id].price,orderId));
+        orders[orderId] = buyRequests[seller][buyRequests[seller].length-1];
+        userRequests[msg.sender].push(buyRequests[listings[id].seller][buyRequests[listings[id].seller].length - 1]);
         sellerList[listings[id].seller].amount -= amount;
         sellerList[listings[id].seller].locked += amount;
         listings[id] = sellerList[listings[id].seller];
+        orderId++;
     }
 
     function buyTokenRequest(uint256 id,uint256 amount) public {
-        require(listings[id].amount > amount, "Not enough tokens");
+        require(listings[id].amount >= amount, "Not enough tokens");
         SellerList memory listing = tokenSellerList[listings[id].seller][listings[id].tokenAddress];
         require(listing.seller != address(0), "Seller not found");
-        orderId++;
         buyRequests[listing.seller].push(buyRequest(payable(msg.sender),listings[id].seller,listings[id].tokenAddress,false,false,true,false,false,amount,listing.price,orderId));
         orders[orderId] = buyRequests[listing.seller][buyRequests[listing.seller].length - 1];
         userRequests[msg.sender].push(buyRequests[listing.seller][buyRequests[listing.seller].length - 1]);
         tokenSellerList[listings[id].seller][listings[id].tokenAddress].amount -= amount;
         tokenSellerList[listings[id].seller][listings[id].tokenAddress].locked += amount;
         listings[id] = tokenSellerList[listings[id].seller][listings[id].tokenAddress];
+        orderId++;
     }
 
-    function releaseBtt(uint256 id) public {
+    function release(uint256 id) public {
         require(orders[id].seller == msg.sender, "You are not the seller");
         require(orders[id].fulfilled == false, "Order fulfilled");
-        require(orders[id].paid, "Order need to be paid");
         if(orders[id].matic == true){
             orders[id].buyer.transfer(orders[id].amount);
-
+            sellerList[orders[id].seller].locked -= orders[id].amount;
+            listings[sellerList[orders[id].seller].listId] = sellerList[orders[id].seller];
         }
         else{
             IBRC20 token = IBRC20(orders[id].tokenAddress);
             require(token.transfer(orders[id].buyer, orders[id].amount), "Token transfer failed");
+            tokenSellerList[orders[id].seller][orders[id].tokenAddress].locked -= orders[id].amount;
+            listings[tokenSellerList[orders[id].seller][orders[id].tokenAddress].listId] = tokenSellerList[orders[id].seller][orders[id].tokenAddress];
         }
-        orders[id].paid = true;
-        sellerList[orders[id].seller].locked -= orders[id].amount;
-        listings[sellerList[orders[id].seller].listId] = sellerList[orders[id].seller];
+        orders[id].fulfilled = true;
     }
     
+    function sellerPayments(address seller) public view returns (payment[] memory){
+        return paymentsOfSeller[seller];
+    }
 }
