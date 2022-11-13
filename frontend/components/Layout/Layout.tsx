@@ -1,7 +1,8 @@
 import { createContext, useState } from "react";
-import NavBar from "../components/Navbar";
+import NavBar from "../Navbar/Navbar";
 import { ReactNode } from "react";
 import { ethers } from "ethers";
+
 interface Prop {
   children?: ReactNode;
 }
