@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useContext } from "react";
-import { dexContext } from "../components/Layout";
+import { dexContext } from "../Layout/Layout";
 export default function Navbar() {
     const {connect,connected} :any= useContext(dexContext);
     return (
