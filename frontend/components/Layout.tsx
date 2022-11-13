@@ -13,6 +13,7 @@ export const dexContext: any = createContext({});
 export default function Layout({ children }: Prop) {
   const [connected, setConnected] = useState(false);
   const [contract, setContract] = useState<any>();
+  const [signer, setSigner] = useState<any>();
   const networks = {
     bttc: {
       chainId: `0x${Number(1029).toString(16)}`,
@@ -49,6 +50,7 @@ export default function Layout({ children }: Prop) {
         contract_abi,
         signer
       );
+      setSigner(signer);
       setContract(contract);
       setConnected(true);
 
@@ -61,7 +63,8 @@ export default function Layout({ children }: Prop) {
       value={{
         connect,
         contract,
-        connected
+        connected,
+        signer
       }}
     >
       <NavBar />

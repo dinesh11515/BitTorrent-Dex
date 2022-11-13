@@ -14,8 +14,11 @@ export default function Navbar() {
                 <Link href="/">
                     <button className="font-semibold uppercase">buy</button>
                 </Link>
-                <Link href="/about">
+                <Link href="/sell">
                     <button className="font-semibold uppercase">sell</button>
+                </Link>
+                <Link href="/register">
+                    <button className="font-semibold uppercase">register</button>
                 </Link>
                 {
                     connected ? <button className="font-semibold uppercase px-4 py-2 bg-black text-white rounded-xl" >connected</button> : <button onClick={connect} className="font-semibold uppercase px-4 py-2 bg-black text-white rounded-xl">connect</button>
