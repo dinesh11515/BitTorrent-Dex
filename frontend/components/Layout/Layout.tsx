@@ -2,10 +2,10 @@ import { createContext, useState } from "react";
 import NavBar from "../Navbar/Navbar";
 import { ReactNode } from "react";
 import { ethers } from "ethers";
+
 interface Prop {
   children?: ReactNode;
 }
-
 
 interface window {
   tronweb: any;
@@ -15,7 +15,6 @@ export const dexContext: any = createContext({});
 
 export default function Layout({ children }: Prop) {
   const [connected, setConnected] = useState(false);
-  
   const networks = {
     bttc: {
       chainId: `0x${Number(1029).toString(16)}`,
