@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useContext } from "react";
 import { dexContext } from "../components/Layout";
 export default function Navbar() {
-    const {connect} :any= useContext(dexContext);
+    const {connect,connected} :any= useContext(dexContext);
     return (
         <nav className="flex items-center justify-between my-5 mx-28">
             <div>
@@ -17,7 +17,9 @@ export default function Navbar() {
                 <Link href="/about">
                     <button className="font-semibold uppercase">sell</button>
                 </Link>
-                <button onClick={connect} className='px-4 py-2 bg-black text-white rounded-xl'>Connect</button>
+                {
+                    connected ? <button className="font-semibold uppercase px-4 py-2 bg-black text-white rounded-xl" >connected</button> : <button onClick={connect} className="font-semibold uppercase px-4 py-2 bg-black text-white rounded-xl">connect</button>
+                }
             </div>
         </nav>
     );
