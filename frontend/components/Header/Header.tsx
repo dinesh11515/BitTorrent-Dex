@@ -1,6 +1,10 @@
 import React from "react";
 
 const Header: React.FC = () => {
+  const getStartedHandler: () => void = () => {
+    console.log("Get Started!");
+  };
+
   return (
     <header className="bg-[#1E1e1e] h-[89vh] bg-[url('/newbg.svg')] bg-center">
       <section className="w-[85%] mx-auto h-[95%] flex flex-col justify-between">
@@ -17,7 +21,10 @@ const Header: React.FC = () => {
             and buy BitTorrent chain cryptocurrencies using any payment method.
           </p>
 
-          <button className="py-3 px-8 mt-8 border font-Grotesk font-semibold border-gray-200 rounded-full bg-gradient-to-r text-transparent bg-clip-text from-[#FD42FB] via-[#CD9ECD] to-[#753FF3] hover:scale-105 transition-all 0.1s ease-in-out ">
+          <button
+            onClick={getStartedHandler}
+            className="py-3 px-8 mt-8 border font-Grotesk font-semibold border-gray-200 rounded-full bg-gradient-to-r text-transparent bg-clip-text from-[#FD42FB] via-[#CD9ECD] to-[#753FF3] hover:scale-105 transition-all 0.1s ease-in-out "
+          >
             Get Started
           </button>
         </div>
