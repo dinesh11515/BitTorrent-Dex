@@ -5,23 +5,33 @@ import paytm from "../../public/paytm.png";
 import gpay from "../../public/gpay.png";
 import phonepe from "../../public/phonepe.png";
 import paypal from "../../public/paypal.png";
-
+import { useContext } from "react";
+import { dexContext } from "../../components/Layout";
+import { ethers } from "ethers";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+  
 const RegistrationFrom: React.FC = () => {
+  const { contract ,connect,connected,signer} :any= useContext(dexContext);
+
+  const [paytmUPI,setPaytmUPI]  = useState<string>("");
+  const [gpayUPI,setGpayUPI]  = useState<string>("");
+  const [phonepeUPI,setPhonepeUPI]  = useState<string>("");
+  const [paypalEmail,setPaypalEmail] = useState<string>("");
+
   const [showPaytmUPI, setShowPaytmUPI] = useState<boolean>(false);
   const [showGpayUPI, setShowGpayUPI] = useState<boolean>(false);
   const [showPaypalUPI, setShowPaypalUPI] = useState<boolean>(false);
   const [showPhonepeUPI, setShowPhonepeUPI] = useState<boolean>(false);
-  const [isChecked, setIsChecked] = useState<boolean>(false);
+  
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
-  const tokenAddressInputRef = useRef<HTMLInputElement>(null);
-  const priceInputRef = useRef<HTMLInputElement>(null);
-  const amountInputRef = useRef<HTMLInputElement>(null);
   const gpayInputRef = useRef<HTMLInputElement>(null);
   const phonepeInputRef = useRef<HTMLInputElement>(null);
   const paytmInputRef = useRef<HTMLInputElement>(null);
   const paypalInputRef = useRef<HTMLInputElement>(null);
+
 
   const paytmUPIHandler: () => void = () => {
     setShowPaytmUPI(!showPaytmUPI);
@@ -51,43 +61,81 @@ const RegistrationFrom: React.FC = () => {
     setShowPhonepeUPI(false);
   };
 
-  const checkboxHandler = () => {
-    setIsChecked(!isChecked);
-  };
+  const paytmUPIChangeHandler = () => {
+    setPaytmUPI(paytmInputRef.current!.value);
+  }
 
-  const registerHandler = (event: React.FormEvent) => {
+  const gpayUPIChangeHandler = () => {
+    setGpayUPI(gpayInputRef.current!.value);
+  }
+
+  const phonepeUPIChangeHandler = () => {
+    setPhonepeUPI(phonepeInputRef.current!.value);
+  }
+
+  const paypalEmailChangeHandler = () => {
+    setPaypalEmail(paypalInputRef.current!.value);
+  }
+
+
+  const registerHandler = async (event: React.FormEvent) => {
     event.preventDefault();
 
     let enteredName = nameInputRef.current!.value;
     let enteredEmail = emailInputRef.current!.value;
-    let enteredPrice = priceInputRef.current!.value;
-    let enteredAmount = amountInputRef.current!.value;
     let enteredGpayUPI = gpayInputRef.current?.value;
     let enteredPhonepeUPI = phonepeInputRef.current?.value;
     let enteredPaypalUPI = paypalInputRef.current?.value;
     let enteredPaytmUPI = paytmInputRef.current?.value;
-    let enteredToken = tokenAddressInputRef.current?.value;
 
     if (
       enteredName.trim().length === 0 ||
-      enteredEmail.trim().length === 0 ||
-      enteredPrice.length === 0 ||
-      enteredAmount.length === 0
+      enteredEmail.trim().length === 0
     )
       return;
 
     if (
-      enteredGpayUPI?.trim().length === 0 ||
-      enteredPhonepeUPI?.trim().length === 0 ||
-      enteredPaypalUPI?.trim().length === 0 ||
-      enteredPaytmUPI?.trim().length === 0
+      enteredGpayUPI &&
+      enteredPhonepeUPI &&
+      enteredPaypalUPI &&
+      enteredPaytmUPI
     )
       return alert("Please enter UPI address");
 
-    if (!isChecked && enteredToken?.length === 0)
-      return alert("Enter Token Address or use BTT Token");
-
-    console.log("Submitted");
+    const payments = []
+    if (enteredGpayUPI) {
+      payments.push({
+        paymentMethod: "gpay",
+        paymentAddress: gpayUPI,
+      })
+    }
+    if (enteredPhonepeUPI) {
+      payments.push({
+        userName: "phonepe",
+        userId: phonepeUPI
+      })
+    }
+    if (enteredPaypalUPI) {
+      payments.push({
+        userName: "paypal",
+        userId: paypalEmail
+      })
+    }
+    if (enteredPaytmUPI) {
+      payments.push({
+        userName: "paytm",
+        userId: paytmUPI
+      })
+    }
+    try {
+      // const tx = await contract.register(enteredName, enteredEmail, payments);
+      // await tx.wait();
+      toast.success("Registered Successfully");
+    }
+    catch (error) {
+      alert(error);
+    }
+    
   };
 
   const labelStyle: string = "font-semibold text-sm mb-1 text-gray-600";
@@ -95,15 +143,14 @@ const RegistrationFrom: React.FC = () => {
     "border border-gray-400 p-2 w-full rounded-lg mb-3";
 
   return (
-    <div className="w-[80%] mx-auto flex rounded-xl bg-white h-screen gap-10 p-3">
+    <div className="w-[80%] mx-auto flex rounded-xl bg-white gap-10 p-3 mt-10">
       <div className="flex-[0.33] bg-[#3c37ff] rounded-xl px-9 py-6 flex flex-col justify-between">
-        <p className="text-white text-2xl font-semibold lowercase">Logo</p>
         <div>
           <h2 className="text-white text-4xl font-semibold mb-4">
-            Start your journey with us.
+            Start your trading journey with us.
           </h2>
           <p className="text-gray-300 text-base">
-            Discover the world's best... some random paragraph we gonna write
+            Discover the world best... some random paragraph we gonna write
             here about our application.
           </p>
         </div>
@@ -199,7 +246,9 @@ const RegistrationFrom: React.FC = () => {
                 ref={paytmInputRef}
                 className={`border border-gray-400 p-2 w-[18rem] rounded-lg`}
                 type="text"
-                placeholder="abcd@paytm"
+                placeholder=  "abcd@paytm"
+                value={paytmUPI}
+                onChange={paytmUPIChangeHandler}
               />
             )}
 
@@ -209,6 +258,8 @@ const RegistrationFrom: React.FC = () => {
                 className={`border border-gray-400 p-2 w-[18rem] rounded-lg`}
                 type="text"
                 placeholder="abcd@oksbi.com"
+                value={gpayUPI}
+                onChange={gpayUPIChangeHandler}
               />
             )}
 
@@ -217,7 +268,9 @@ const RegistrationFrom: React.FC = () => {
                 ref={paypalInputRef}
                 className={`border border-gray-400 p-2 w-[18rem] rounded-lg`}
                 type="text"
-                placeholder="abcd@paypal"
+                placeholder="abcd@gmail.com"
+                value={paypalEmail}
+                onChange={paypalEmailChangeHandler}
               />
             )}
 
@@ -226,67 +279,34 @@ const RegistrationFrom: React.FC = () => {
                 ref={phonepeInputRef}
                 className={`border border-gray-400 p-2 w-[18rem] rounded-lg`}
                 type="text"
-                placeholder="abcd@phonepe"
+                placeholder="abcd@ybl"
+                value={phonepeUPI}
+                onChange={phonepeUPIChangeHandler}
               />
             )}
           </div>
-          <div className="py-3">
-            <label className={`${labelStyle}`}>
-              <input
-                onChange={checkboxHandler}
-                className="inline-block h-4 w-4 mr-2 rounded-lg"
-                type="checkbox"
-                id="btt"
-                value="btt"
-                checked={isChecked}
-              />
-              BitTorrent Token
-            </label>
-          </div>
-
-          <label htmlFor="token-address" className={labelStyle}>
-            Token Address
-          </label>
-          <input
-            ref={tokenAddressInputRef}
-            className={inputStyle}
-            type="text"
-            id="token-address"
-          />
-          <div className="flex gap-10">
-            <div className="flex flex-col ">
-              <label htmlFor="price" className={labelStyle}>
-                Price
-              </label>
-              <input
-                required
-                ref={priceInputRef}
-                className={`border border-gray-400 p-2 w-[18rem] rounded-lg`}
-                id="price"
-                type="number"
-              />
-            </div>
-            <div>
-              <label htmlFor="amount" className={labelStyle}>
-                Amount
-              </label>
-              <input
-                required
-                ref={amountInputRef}
-                className={`border border-gray-400 p-2 w-[18rem] rounded-lg`}
-                type="number"
-                id="amount"
-              />
-            </div>
-          </div>
+          
+          {
+            connected ? 
           <button
             className="py-2 mt-4 w-[15rem] text-lg text-white bg-[#3c37ff] rounded-md hover:bg-[#2a269e]"
             type="submit"
           >
             Register
           </button>
+          :
+          <button
+            className="py-2 mt-4 w-[15rem] text-lg text-white bg-[#3c37ff] rounded-md hover:bg-[#2a269e]"
+            type="button"
+            onClick={connect}
+          >
+            Connect Wallet
+          </button>
+
+          }
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };
