@@ -1,10 +1,4 @@
-import Image from "next/image";
 import React, { useRef, useState } from "react";
-import me from "../../public/pic.jpg";
-import paytm from "../../public/paytm.png";
-import gpay from "../../public/gpay.png";
-import phonepe from "../../public/phonepe.png";
-import paypal from "../../public/paypal.png";
 import { useContext } from "react";
 import { dexContext } from "../../components/Layout/Layout";
 import { ethers, Signer } from "ethers";
