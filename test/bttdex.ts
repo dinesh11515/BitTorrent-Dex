@@ -25,7 +25,7 @@ describe("Overall testing", function () {
     it("registration", async function () {
         let name = "dinesh aitham";
         let email = "dineshaitham2@gmail.com";
-        let payments = [{userName:"paytm",userId:"8897230284@apaytm"},{userName:"phonepe",userId:"8897230284@ybl"}];
+        let payments = [{appName:"paytm",userId:"8897230284@apaytm"},{appName:"phonepe",userId:"8897230284@ybl"}];
         let tx = await contract.register(name,email,payments);
         await tx.wait();
         let user = await contract.sellerPayments(owner.address);
@@ -41,7 +41,7 @@ describe("Overall testing", function () {
         let listings = await contract.listings(0);
         let id = listings.listId;
         console.log(id)
-        tx = await contract.connect(addr1).buyBttRequest(id,amount);
+        tx = await contract.connect(addr1).buyBttRequest(id,amount,"dnesh");
         await tx.wait();
         console.log("buy btt request")
         let initialBal = await addr1.provider?.getBalance(addr1.address)
@@ -75,7 +75,7 @@ describe("Overall testing", function () {
         let listings = await contract.listings(1);
         let id = listings.listId;
         console.log(id)
-        tx = await contract.connect(addr1).buyTokenRequest(id,amount);
+        tx = await contract.connect(addr1).buyTokenRequest(id,amount,"dinesh");
         await tx.wait();
         let initialBal = await token.balanceOf(addr1.address);
         console.log("buy token request")

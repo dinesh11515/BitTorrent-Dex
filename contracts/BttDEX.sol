@@ -1,7 +1,6 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 import "./IBRC20.sol";
-import "hardhat/console.sol";
 
 contract  BttDEX {
 
@@ -31,6 +30,7 @@ contract  BttDEX {
         uint256 amount;
         uint256 price;
         uint256 orderId;
+        string buyerName;
     }
 
     struct SellerList {
@@ -59,7 +59,6 @@ contract  BttDEX {
     function register(string memory _name, string memory _email,payment[] memory _payments) public {
         require (sellers[msg.sender].seller == address(0), "You are already registered");
         sellers[msg.sender] = Seller(payable(msg.sender),_name,_email);
-        console.log(_payments[0].appName);
         for(uint8 i = 0; i < _payments.length; i++){
             paymentsOfSeller[msg.sender].push(_payments[i]);
         }
@@ -96,11 +95,11 @@ contract  BttDEX {
         }
     }
 
-    function buyBttRequest(uint256 id,uint256 amount) public payable {
+    function buyBttRequest(uint256 id,uint256 amount,string memory _name) public payable {
         require(listings[id].amount >= amount, "Not enough tokens");
         address payable seller = listings[id].seller;
         require(seller != address(0), "Seller not found");
-        buyRequests[seller].push(buyRequest(payable(msg.sender),seller,address(0),true,false,true,false,false,amount,listings[id].price,orderId));
+        buyRequests[seller].push(buyRequest(payable(msg.sender),seller,address(0),true,false,true,false,false,amount,listings[id].price,orderId,_name));
         orders[orderId] = buyRequests[seller][buyRequests[seller].length-1];
         userRequests[msg.sender].push(buyRequests[listings[id].seller][buyRequests[listings[id].seller].length - 1]);
         sellerList[listings[id].seller].amount -= amount;
@@ -109,11 +108,11 @@ contract  BttDEX {
         orderId++;
     }
 
-    function buyTokenRequest(uint256 id,uint256 amount) public {
+    function buyTokenRequest(uint256 id,uint256 amount,string memory _name) public {
         require(listings[id].amount >= amount, "Not enough tokens");
         SellerList memory listing = tokenSellerList[listings[id].seller][listings[id].tokenAddress];
         require(listing.seller != address(0), "Seller not found");
-        buyRequests[listing.seller].push(buyRequest(payable(msg.sender),listings[id].seller,listings[id].tokenAddress,false,false,true,false,false,amount,listing.price,orderId));
+        buyRequests[listing.seller].push(buyRequest(payable(msg.sender),listings[id].seller,listings[id].tokenAddress,false,false,true,false,false,amount,listing.price,orderId,_name));
         orders[orderId] = buyRequests[listing.seller][buyRequests[listing.seller].length - 1];
         userRequests[msg.sender].push(buyRequests[listing.seller][buyRequests[listing.seller].length - 1]);
         tokenSellerList[listings[id].seller][listings[id].tokenAddress].amount -= amount;
@@ -145,5 +144,9 @@ contract  BttDEX {
 
     function allListings() public view returns (SellerList[] memory){
         return listings;
+    }
+
+    function getRequests(address seller) public view returns (buyRequest[] memory){
+        return buyRequests[seller];
     }
 }

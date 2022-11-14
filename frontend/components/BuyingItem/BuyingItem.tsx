@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { ethers } from "ethers";
 import Modal from "../Modal/Modal";
+import { useContext,useEffect } from "react";
+import { dexContext } from "../../components/Layout/Layout";
 const BuyingItem: React.FC<{
   name: string;
   quantity: number;
   price: number;
 }> = ({ name, quantity, price }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const { contract,signer ,account}: any = useContext(dexContext);
+
   const buyItemHandler = () => {
     setShowModal(true);
   };
@@ -18,6 +22,16 @@ const BuyingItem: React.FC<{
   function getFormatedAmount(amount: number) {
     return ethers.utils.formatEther(amount).toString();
   }
+
+  const buyItem = async (id:number,amount:number,name:string) => {
+    try {
+      const tx = await contract.buyBttRequest(id,amount,name);
+      await tx.wait();
+      alert("Item bought successfully!");
+    } catch (e) {
+      alert(e);
+    }
+  };
 
   return (
     <div className="flex items-center text-gray-400 py-3  rounded mt-2 bg-blur bg-[#474747]/30">
@@ -42,6 +56,7 @@ const BuyingItem: React.FC<{
           tokenName={name}
           tokenPrice={getFormatedAmount(price)}
           tokenQuantity={getFormatedAmount(quantity)}
+          buyItem={buyItem}
         />
       )}
     </div>

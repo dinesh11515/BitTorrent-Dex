@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React, { useRef, useState } from "react";
-
+import { ethers } from "ethers";
 const Backdrop: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   return (
     <div
@@ -15,7 +15,8 @@ const Modal: React.FC<{
   tokenName: string;
   tokenPrice: string;
   tokenQuantity: string;
-}> = ({ tokenName, tokenPrice, tokenQuantity, onClose }) => {
+  buyItem: (id: number, amount: number, name: string) => void;
+}> = ({ tokenName, tokenPrice, tokenQuantity, onClose ,buyItem}) => {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const quantitynputRef = useRef<HTMLInputElement>(null);
 
@@ -27,6 +28,8 @@ const Modal: React.FC<{
 
     if (!enteredName || !enteredQuantity)
       return alert("Please enter input fields");
+
+    buyItem(1,Number(enteredQuantity),enteredName);
   };
 
   return (
@@ -91,6 +94,7 @@ const Modal: React.FC<{
           <button
             type="submit"
             className="w-full bg-[#1e1e1e] text-gray-300 uppercase font-Grotesk tracking-wider py-3 mt-5 rounded-xl"
+            onClick={modalSubmitHandler}
           >
             Confirm
           </button>
