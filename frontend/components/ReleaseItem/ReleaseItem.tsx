@@ -12,9 +12,7 @@ const ReleaseItem: React.FC<{
 
   return (
     <div className="flex items-center text-gray-400 py-3  rounded mt-2 bg-blur bg-[#474747]/30">
-      <h2 className=" flex-[0.25] text-center font-semibold text-white">
-        {sellerName}
-      </h2>
+      
       <h2 className=" flex-[0.25] text-center font-semibold text-white">
         {tokenName}
       </h2>

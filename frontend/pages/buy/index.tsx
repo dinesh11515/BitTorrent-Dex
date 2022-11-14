@@ -32,6 +32,7 @@ const BuyingPage: React.FC = () => {
         provider
       );
       const data = await contract.allListings();
+      console.log(data);
       setData(data);
     }
     catch(e){

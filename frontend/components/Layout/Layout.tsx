@@ -15,6 +15,7 @@ export default function Layout({ children }: Prop) {
   const [connected, setConnected] = useState(false);
   const [contract, setContract] = useState<any>();
   const [signer, setSigner] = useState<any>();
+  const [account, setAccount] = useState<string>("");
   const networks = {
     bttc: {
       chainId: `0x${Number(1029).toString(16)}`,
@@ -54,6 +55,7 @@ export default function Layout({ children }: Prop) {
       setSigner(signer);
       setContract(contract);
       setConnected(true);
+      setAccount(await signer.getAddress());
 
     } catch (e) {
       alert(e);
@@ -65,7 +67,8 @@ export default function Layout({ children }: Prop) {
         connect,
         contract,
         connected,
-        signer
+        signer,
+        account
       }}
     >
       <NavBar />
