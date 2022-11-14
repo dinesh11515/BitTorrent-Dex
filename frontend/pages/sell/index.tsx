@@ -9,7 +9,8 @@ import { useContext } from "react";
 import { dexContext } from "../../components/Layout/Layout";
 import { ethers, Signer } from "ethers";
 import { erc20abi, contract_address } from "../../constants/index";
-const RegistrationFrom: React.FC = () => {
+
+const SellingFrom: React.FC = () => {
   const { contract, connect, connected, signer }: any = useContext(dexContext);
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -165,4 +166,4 @@ const RegistrationFrom: React.FC = () => {
   );
 };
 
-export default RegistrationFrom;
+export default SellingFrom;

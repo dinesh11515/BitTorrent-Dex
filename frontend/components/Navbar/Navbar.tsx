@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
               <Link href="/register">Register</Link>
             </li>
             <li className="hover:scale-105 hover:font-semibold cursor-pointer transition-all 0.1s ease-in-out">
-              <Link href="/">Buy</Link>
+              <Link href="/buy">Buy</Link>
             </li>
             <li className="hover:scale-105 hover:font-semibold cursor-pointer transition-all 0.1s ease-in-out">
               <Link href="/sell">Sell</Link>
