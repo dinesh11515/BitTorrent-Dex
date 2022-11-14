@@ -99,31 +99,31 @@ const RegistrationFrom: React.FC = () => {
     const payments = [];
     if (enteredGpayUPI) {
       payments.push({
-        paymentMethod: "gpay",
-        paymentAddress: gpayUPI,
+        appName: "gpay",
+        userId: gpayUPI,
       });
     }
     if (enteredPhonepeUPI) {
       payments.push({
-        userName: "phonepe",
+        appName: "phonepe",
         userId: phonepeUPI,
       });
     }
     if (enteredPaypalUPI) {
       payments.push({
-        userName: "paypal",
+        appName: "paypal",
         userId: paypalEmail,
       });
     }
     if (enteredPaytmUPI) {
       payments.push({
-        userName: "paytm",
+        appName: "paytm",
         userId: paytmUPI,
       });
     }
     try {
-      // const tx = await contract.register(enteredName, enteredEmail, payments);
-      // await tx.wait();
+      const tx = await contract.register(enteredName, enteredEmail, payments);
+      await tx.wait();
       toast.success("Registered Successfully");
     } catch (error) {
       alert(error);
@@ -135,7 +135,7 @@ const RegistrationFrom: React.FC = () => {
     "border border-gray-400 p-2 w-full rounded-lg mb-3";
 
   return (
-    <div className="h-[89vh] py-20 bg-[#1E1e1e] bg-[url('/bg2.png')] bg-center">
+    <div className="h-screen py-20 bg-[#1E1e1e] bg-[url('/bg2.png')] bg-center">
       <div className="w-[80%] mx-auto flex rounded-xl  gap-10 px-3 py-5 ">
         <div className="flex-[0.33] bg-[#3c37ff] rounded-xl px-9 py-6 flex flex-col justify-between">
           <div>
@@ -171,7 +171,7 @@ const RegistrationFrom: React.FC = () => {
           </div>
         </div>
         <div className="flex-[0.67] pr-10 py-4">
-          <h2 className="text-3xl font-semibold mb-6">Register Here</h2>
+          <h2 className="text-3xl text-white font-semibold mb-6">Register Here</h2>
 
           {/* Form */}
           <form onSubmit={registerHandler}>

@@ -6,7 +6,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-[#1E1e1e] h-[89vh] bg-[url('/newbg.svg')] bg-center">
+    <header className="bg-[#1E1e1e] h-screen bg-[url('/newbg.svg')] bg-center">
       <section className="w-[85%] mx-auto h-[95%] flex flex-col justify-between">
         <div className="w-[80%] mx-auto py-32 text-center">
           <h2 className="text-white  font-Grotesk text-5xl mb-6 tracking-wide leading-[50px]">

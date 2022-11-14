@@ -9,7 +9,7 @@ contract  BttDEX {
     uint256 listId;
 
     struct payment {
-        string userName;
+        string appName;
         string userId;
     }
 
@@ -23,7 +23,7 @@ contract  BttDEX {
         address payable buyer;
         address payable seller;
         address tokenAddress;
-        bool matic;
+        bool BTT;
         bool fulfilled;
         bool paid;
         bool cancelled;
@@ -37,7 +37,7 @@ contract  BttDEX {
         address payable seller;
         address tokenAddress;
         string tokenName;
-        bool matic;
+        bool BTT;
         uint256 listId;
         uint256 amount;
         uint256 locked;
@@ -59,7 +59,7 @@ contract  BttDEX {
     function register(string memory _name, string memory _email,payment[] memory _payments) public {
         require (sellers[msg.sender].seller == address(0), "You are already registered");
         sellers[msg.sender] = Seller(payable(msg.sender),_name,_email);
-        console.log(_payments[0].userName);
+        console.log(_payments[0].appName);
         for(uint8 i = 0; i < _payments.length; i++){
             paymentsOfSeller[msg.sender].push(_payments[i]);
         }
@@ -68,7 +68,7 @@ contract  BttDEX {
     function sellBtt(uint256 amount,uint256 price) public payable {
         require(msg.value == amount, "You must send the exact amount");
         if(sellerList[msg.sender].seller != msg.sender){
-            sellerList[msg.sender] = SellerList(payable(msg.sender), address(0),"MATIC",true,listId, amount,0, price, block.timestamp);
+            sellerList[msg.sender] = SellerList(payable(msg.sender), address(0),"BTT",true,listId, amount,0, price, block.timestamp);
             listings.push(sellerList[msg.sender]);
             listId++;
         }
@@ -125,7 +125,7 @@ contract  BttDEX {
     function release(uint256 id) public {
         require(orders[id].seller == msg.sender, "You are not the seller");
         require(orders[id].fulfilled == false, "Order fulfilled");
-        if(orders[id].matic == true){
+        if(orders[id].BTT == true){
             orders[id].buyer.transfer(orders[id].amount);
             sellerList[orders[id].seller].locked -= orders[id].amount;
             listings[sellerList[orders[id].seller].listId] = sellerList[orders[id].seller];
@@ -141,5 +141,9 @@ contract  BttDEX {
     
     function sellerPayments(address seller) public view returns (payment[] memory){
         return paymentsOfSeller[seller];
+    }
+
+    function allListings() public view returns (SellerList[] memory){
+        return listings;
     }
 }

@@ -9,7 +9,8 @@ import { useContext } from "react";
 import { dexContext } from "../../components/Layout/Layout";
 import { ethers, Signer } from "ethers";
 import { erc20abi, contract_address } from "../../constants/index";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const SellingFrom: React.FC = () => {
   const { contract, connect, connected, signer }: any = useContext(dexContext);
 
@@ -61,7 +62,7 @@ const SellingFrom: React.FC = () => {
         );
         await tx.wait();
       }
-      alert("Registered Successfully");
+      toast.success("Token Listed Successfully");
     } catch (error) {
       alert(error);
     }
@@ -73,7 +74,7 @@ const SellingFrom: React.FC = () => {
     "border border-gray-400 p-2 w-full rounded-lg mb-3";
 
   return (
-    <div className="w-full  flex flex-col bg-[#1e1e1e]  items-center h-[89vh] bg-[url('/bg2.png')] bg-center  justify-center   gap-10">
+    <div className="w-full  flex flex-col bg-[#1e1e1e]  items-center h-screen bg-[url('/bg2.png')] bg-center  justify-center   gap-10">
       <div className="flex-[0.67] p-8 rounded-xl border border-gray-500 shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]">
         <p className="text-4xl font-Grotesk font-semibold mb-8 bg-gradient-to-r text-transparent bg-clip-text from-[#FD42FB] via-[#CD9ECD] to-[#753FF3]">
           Sell any BitTorrent Chain Token
@@ -162,6 +163,7 @@ const SellingFrom: React.FC = () => {
           )}
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };

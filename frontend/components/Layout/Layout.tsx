@@ -2,19 +2,18 @@ import { createContext, useState } from "react";
 import NavBar from "../Navbar/Navbar";
 import { ReactNode } from "react";
 import { ethers } from "ethers";
-
+import { contract_address, contract_abi } from "../../constants/index";
 interface Prop {
   children?: ReactNode;
 }
 
-interface window {
-  tronweb: any;
-}
 
 export const dexContext: any = createContext({});
 
 export default function Layout({ children }: Prop) {
   const [connected, setConnected] = useState(false);
+  const [contract, setContract] = useState<any>();
+  const [signer, setSigner] = useState<any>();
   const networks = {
     bttc: {
       chainId: `0x${Number(1029).toString(16)}`,
@@ -36,7 +35,7 @@ export default function Layout({ children }: Prop) {
       );
       await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
-      if ((await signer.getChainId()) != 80001) {
+      if ((await signer.getChainId()) != 1028) {
         await window.ethereum.request({
           method: "wallet_addEthereumChain",
           params: [
@@ -46,6 +45,15 @@ export default function Layout({ children }: Prop) {
           ],
         });
       }
+      const contract = new ethers.Contract(
+        contract_address,
+        contract_abi,
+        signer
+      );
+      setSigner(signer);
+      setContract(contract);
+      setConnected(true);
+
     } catch (e) {
       alert(e);
     }
@@ -54,6 +62,9 @@ export default function Layout({ children }: Prop) {
     <dexContext.Provider
       value={{
         connect,
+        contract,
+        connected,
+        signer
       }}
     >
       <NavBar />
