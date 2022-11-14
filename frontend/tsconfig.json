@@ -13,8 +13,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "typeRoots": ["./node_modules/@types", "./globals.d.ts"],
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx","globals.d.ts"],
   "exclude": ["node_modules"]
 }
