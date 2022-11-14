@@ -75,7 +75,7 @@ const SellingFrom: React.FC = () => {
 
   return (
     <div className="w-full  flex flex-col bg-[#1e1e1e]  items-center h-screen bg-[url('/bg2.png')] bg-center  justify-center   gap-10">
-      <div className="flex-[0.67] p-8 rounded-xl border border-gray-500 shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]">
+      <div className="flex-[0.67] p-8 rounded-xl mt-24 border border-gray-500 shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]">
         <p className="text-4xl font-Grotesk font-semibold mb-8 bg-gradient-to-r text-transparent bg-clip-text from-[#FD42FB] via-[#CD9ECD] to-[#753FF3]">
           Sell any BitTorrent Chain Token
         </p>
@@ -109,6 +109,7 @@ const SellingFrom: React.FC = () => {
             className={inputStyle}
             type="text"
             id="token-address"
+            placeholder="0x000000000000000"
           />
           <label htmlFor="token-name" className={labelStyle}>
             Token Name
@@ -118,6 +119,7 @@ const SellingFrom: React.FC = () => {
             className={inputStyle}
             type="text"
             id="token-name"
+            placeholder="BitTorrent"
           />
           <div className="flex gap-10">
             <div className="flex flex-col ">
@@ -130,6 +132,7 @@ const SellingFrom: React.FC = () => {
                 className={`border border-gray-400 p-2 w-[18rem] rounded-lg`}
                 id="price"
                 type="text"
+                placeholder="0.12"
               />
             </div>
             <div className="flex flex-col ">
@@ -142,19 +145,20 @@ const SellingFrom: React.FC = () => {
                 className={`border border-gray-400 p-2 w-[18rem] rounded-lg`}
                 type="number"
                 id="amount"
+                placeholder="2"
               />
             </div>
           </div>
           {connected ? (
             <button
-              className="mt-10 bg-gray-600 text-white text-lg px-4 py-2 rounded-md font-Grotesk font-medium hover:scale-105 hover:bg-gray-300 hover:text-black"
+              className="mt-10  bg-gray-600 text-white text-lg px-20 uppercase py-2 rounded-md font-Grotesk font-medium hover:scale-105 hover:bg-gray-300 hover:text-black"
               type="submit"
             >
               Sell
             </button>
           ) : (
             <button
-              className="mt-10 bg-gradient-to-r  from-[#FD42FB] via-[#CD9ECD] to-[#753FF3] text-gray-100 text-lg px-4 py-2 rounded-md font-Grotesk font-medium hover:scale-105 hover:bg-gray-300 hover:text-black"
+              className="mt-10 bg-gradient-to-r  uppercase from-[#FD42FB] via-[#CD9ECD] to-[#753FF3] text-gray-100 text-lg px-4 py-2 rounded-md font-Grotesk font-medium hover:scale-105 hover:bg-gray-300 hover:text-black"
               type="button"
               onClick={connect}
             >

@@ -8,7 +8,7 @@ const Header: React.FC = () => {
   return (
     <header className="bg-[#1E1e1e] h-screen bg-[url('/newbg.svg')] bg-center">
       <section className="w-[85%] mx-auto h-[95%] flex flex-col justify-between">
-        <div className="w-[80%] mx-auto py-32 text-center">
+        <div className="w-[80%] mx-auto py-32 text-center mt-16">
           <h2 className="text-white  font-Grotesk text-5xl mb-6 tracking-wide leading-[50px]">
             <span className="bg-gradient-to-r text-transparent bg-clip-text from-[#FD42FB] via-[#CD9ECD] to-[#753FF3] ">
               The most intuitive way to buy and sell
