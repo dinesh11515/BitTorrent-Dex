@@ -46,7 +46,7 @@ const BuyingPage: React.FC = () => {
 
   return (
     <section className="h-screen bg-[#1e1e1e] bg-[url('/bg2.png')] bg-center overflow-hidden">
-      <div className="w-[90%] mx-auto py-10">
+      <div className="w-[90%] mx-auto py-28">
         <h2 className="font-Grotesk text-3xl font-semibold mb-8 text-center bg-gradient-to-r text-transparent bg-clip-text from-[#FD42FB] via-[#CD9ECD] to-[#753FF3]">
           Get Your Required Crypto with a Single Click.
         </h2>

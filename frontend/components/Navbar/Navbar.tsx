@@ -22,7 +22,7 @@ const Navbar: React.FC = () => {
         </h2>
 
         <div className="flex gap-10 items-center">
-          <ul className="flex gap-14 uppercase font-thin tracking-widest">
+          <ul className="flex gap-14 uppercase font-thin text-sm tracking-widest">
             <li className="hover:scale-105 hover:font-semibold cursor-pointer transition-all 0.1s ease-in-out">
               <Link href="/register">Register</Link>
             </li>
@@ -31,6 +31,9 @@ const Navbar: React.FC = () => {
             </li>
             <li className="hover:scale-105 hover:font-semibold cursor-pointer transition-all 0.1s ease-in-out">
               <Link href="/sell">Sell</Link>
+            </li>
+            <li className="hover:scale-105 hover:font-semibold cursor-pointer transition-all 0.1s ease-in-out">
+              <Link href="/release">Release</Link>
             </li>
             <li className="hover:scale-105 hover:font-semibold cursor-pointer transition-all 0.1s ease-in-out">
               <Link href="/about">How to Trade?</Link>
